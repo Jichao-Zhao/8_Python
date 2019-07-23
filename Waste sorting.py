@@ -12,7 +12,7 @@ UUID = str(time.time())
 host = 'http://rubbish.market.alicloudapi.com'
 path = '/ai_market/ai_image_universal/rubbish/v1'
 #阿里云APPCODE
-appcode = 'f2334abe04d547b0a8694349a0b9a078'			#此服务的AppCode
+appcode = 'APPCODE'			#自己购买服务的AppCode
 bodys = {}
 url = host + path
 
@@ -28,7 +28,7 @@ url = host + path
 
 #启用URL方式进行识别
 #内容数据类型是图像文件URL链接
-bodys['IMAGE'] = 'https://images-na.ssl-images-amazon.com/images/I/51RCosrIe7L._SY550_.jpg'
+bodys['IMAGE'] = 'https://images-na.ssl-images-amazon.com/images/I/51RCosrIe7L._SY550_.jpg'	#图片的URL地址
 bodys['IMAGE_TYPE'] = '1'
 
 post_data = urllib.parse.urlencode(bodys).encode('utf-8')
