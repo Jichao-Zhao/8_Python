@@ -19,8 +19,6 @@ if (content):
 # expires_in： Access Token的有效期(秒为单位，一般为1个月)；
 #########################################################
 
-
-
 #########################################################相同图检索—检索
 	request_url = "https://aip.baidubce.com/rest/2.0/realtime_search/same_hq/search"
 
