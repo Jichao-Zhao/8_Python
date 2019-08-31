@@ -1,6 +1,10 @@
 # -*- coding: UTF-8 -*-
 # !/usr/local/bin/python3
 
+# 阿里云服务第三方公司服务
+# 可用于检测垃圾的种类，返回结果是金属的概率，塑料的概率，玻璃的概率，和其他的概率
+# 基于对图片的材料进行分析，以此来判断垃圾的种类
+
 import urllib
 import urllib.request
 import time
