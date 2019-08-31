@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# encoding:utf-8
 # !/usr/local/bin/python3
 
 # 百度云：图像搜索服务
@@ -8,6 +8,7 @@ import urllib, urllib.request, sys
 import ssl
 import base64
 import json
+
 
 #########################################################
 # 调用API前必须获取Access Token
@@ -34,27 +35,32 @@ if (content):
 
 
 
+
 '''
-#########################################################相同图检索—检索
-request_url = "https://aip.baidubce.com/rest/2.0/realtime_search/same_hq/search"
+相似图检索—检索
+'''
+
+request_url = 'https://aip.baidubce.com/rest/2.0/image-classify/v1/realtime_search/similar/search'
 
 # 二进制方式打开图片文件
-f = open('/Users/zhaojichao/Desktop/红笔.png', 'rb')
-
-
+f = open('/Users/zhaojichao/Desktop/image.jpeg', 'rb')
 img = base64.b64encode(f.read())
 
-
-params = {"image": img}
+params = {"image": img, "pn": "200", "rn": "100"}
 params = urllib.parse.urlencode(params)
+params = params.encode('utf-8')
 
-access_token = '24.141091b91c31ba757592be819bc0da76.2592000.1566918047.282335-16902645'
+access_token = access_token
 request_url = request_url + "?access_token=" + access_token
 request = urllib.request.Request(url=request_url, data=params)
-request.add_header('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+request.add_header('Content-Type', 'application/x-www-form-urlencoded')
 response = urllib.request.urlopen(request)
-content_result = response.read()
-if (content_result):
-    print(content_result)
-#########################################################
-'''
+content = response.read()
+if content:
+    print ('content successful')
+    print (content)
+
+
+
+
+
