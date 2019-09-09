@@ -3,6 +3,8 @@ from django.http import HttpResponse
 
 from blog.models import Article
 
+from django.core.paginator import Paginator
+
 # Create your views here.
 def hello_world(request):
     return HttpResponse("Hello World")
@@ -20,10 +22,32 @@ def article_content(request):
     return HttpResponse(return_str)
 
 def get_index_page(request):
+    page = request.GET.get('page')
+    if  page:
+        page = int(page)
+    else:
+        page = 1
+    #print('page param:', page)
     all_article = Article.objects.all()
+    paginator = Paginator(all_article, 3)
+    page_num = paginator.num_pages
+    #print('page num:', paginator.num_pages)
+    page_article_list = paginator.page(page)
+    if page_article_list.has_next():
+        next_page = page + 1
+    else:
+        next_page = page
+    if page_article_list.has_previous():
+        previous_page = page - 1
+    else:
+        previous_page = page
     return render(request, 'blog/index.html', 
                 {
-                    'article_list': all_article
+                    'article_list': page_article_list,
+                    'page_num': range(1, page_num + 1),
+                    'curr_page': page,
+                    'previous_page': previous_page,
+                    'next_page': next_page
                 }
                 )
     pass
