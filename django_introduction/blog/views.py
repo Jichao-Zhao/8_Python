@@ -28,8 +28,14 @@ def get_index_page(request):
                 )
     pass
 
-def get_detail_page(request):
-    curr_article = Article.objects.all()[0]
+def get_detail_page(request, article_id):
+    curr_article = None
+    all_article = Article.objects.all()
+    for article in all_article:
+        if  article.article_id == article_id:
+            curr_article = article
+            break
+    #curr_article = Article.objects.all()[0]
     section_list = curr_article.content.split('\n')
     return render(request, 'blog/detail.html',
                 {
