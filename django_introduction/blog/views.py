@@ -29,6 +29,8 @@ def get_index_page(request):
         page = 1
     #print('page param:', page)
     all_article = Article.objects.all()
+    top5_article_list = Article.objects.order_by('-publish_date')[:5]
+
     paginator = Paginator(all_article, 3)
     page_num = paginator.num_pages
     #print('page num:', paginator.num_pages)
@@ -47,7 +49,8 @@ def get_index_page(request):
                     'page_num': range(1, page_num + 1),
                     'curr_page': page,
                     'previous_page': previous_page,
-                    'next_page': next_page
+                    'next_page': next_page,
+                    'top5_article_list': top5_article_list
                 }
                 )
     pass
