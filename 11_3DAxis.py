@@ -56,19 +56,28 @@ Bz = [0, 8]
 fig = plt.figure()
 ax = p3.Axes3D(fig)
 
+# 绘制三维直线
 ax.plot(Ax, Ay, Az, color='red', linestyle='-')
+# 绘制三维箭头
 ax.quiver(Ax[-1], Ay[-1], Az[-1], Ax[-1]*0.1, Ay[-1]*0.1, Az[-1]
           * 0.1, color='red', linestyle='-', normalize=False)
+# 绘制三维点
 ax.scatter(Ax[-1]*1.1, Ay[-1]*1.1, Az[-1]*1.1, color='red')
-ax.text(Ax[-1]+1, Ay[-1]-1, Az[-1]-0, "Qa = [Qx, Qy, Qz]", color='black')
-ax.text(Ax[-1]+1, Ay[-1]+1, Az[-1]+1, "Point_A", color='black')
+# 添加三维文字注释
+ax.text(Ax[-1]+1, Ay[-1]-1, Az[-1]-0, "Qb = [Qx', Qy', Qz']", color='black')
+ax.text(Ax[-1]+1, Ay[-1]+1, Az[-1]+1, "Point_B", color='black')
+ax.scatter(0, 0, 0, color='red')
+ax.text(0, 0, 1, "Point_A", color='black')
+ax.text(0+2, 0-1, 1-0, "Qa = [Qx, Qy, Qz]", color='black')
 
+'''
 ax.plot(Bx, By, Bz, color='blue', linestyle='-.')
 ax.quiver(Bx[-1], By[-1], Bz[-1], Bx[-1]*0.1, By[-1]*0.1, Bz[-1]
           * 0.1, color='blue', linestyle='-.', normalize=False)
 ax.scatter(Bx[-1]*1.1, By[-1]*1.1, Bz[-1]*1.1, color='blue')
 ax.text(Bx[-1]-1, By[-1]-1, Bz[-1]+1, "Qb = [Qx', Qy', Qz']", color='black')
 ax.text(Bx[-1]+1, By[-1]+1, Bz[-1]+1, "Point_B", color='black')
+'''
 
 ax.text2D(0.05, 0.95, "3D Axis", transform=ax.transAxes)
 
