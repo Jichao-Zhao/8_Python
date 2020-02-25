@@ -1,41 +1,55 @@
 # 深度学习的数学 3-5
 # The model has three layers, they are Input layer, Hiden layer, Output layer.
 # The structure of model is 12(Input)-3(Hiden)-2(Output)
-# The Hiden layer Weight is w2(12)，Bias is b2(3).
-# The Output layer Weight is w3(3)，Bias is b3(2).
+# The Hiden layer Weight is w2(12*3)，Bias is b2(3).
+# The Output layer Weight is w3(3*2)，Bias is b3(2).
 
-import numpy as np
-from scipy.special import erfinv
-
-# Box-Muller method convert Uniform distribution to Normal distribution
-# mu is expect. sigma is standard variance. size is number of sample.
-def boxmullersampling(mu=0, sigma=1, size=1):
-    u = np.random.uniform(size=size)
-    v = np.random.uniform(size=size)
-    z = np.sqrt(-2*np.log(u))*np.cos(2*np.pi*v)
-    return mu+z*sigma
-
-list = boxmullersampling(mu=180,sigma=10,size=10000)
-b = 0
-for i in range(len(list)):
-    if (list[i] > 150 and list[i] < 210):
-        b = b + 1
-print(b)
-
-
-# 利用分布函数的反函数
-def inverfsampling(mu=0, sigma=1, size=1):
-    z = np.sqrt(2)*erfinv(2*np.random.uniform(size=size)-1)
-    return mu+z*sigma
-
+import BoxMullerMethod
 
 # Hiden layer weights and bias
-w2 = []
-b2 = [-0.987, 0.841, -3.588]
+w2 = [  [-0.45444516, -1.83510657, 1.27247984, -1.45458804, 1.08766694, -0.37151135,
+         -0.8573246, -0.05739722, -1.4002747, 0.42005857, 0.99200974, -0.87716348],
+        [0.0327783, -0.72105977, -0.7385377, 0.06201517, 0.29853099, -0.26401057, 
+         0.3584689, 0.08528764, -0.30570022, -0.54182688, -0.22010296, 0.75816668],
+        [-0.75117284, 0.27116044, -0.60955939, -0.2098032, 0.38849476, -0.44462426, 
+         2.00073451, 0.34762639, -1.22162309, -0.86771674, -1.46696489, 0.69337321]]
+# eg: w2[0][0], w2[1][5], w2[2][11]
+b2 = [0.19351774, -1.53711558, -1.66900736]
+# eg: b2[0], b2[1], b2[2]
 
 # Output layer weights and bias
-w3 = []
-b3 = [6.644, -0.3271]
+w3 = [  [1.03787369, 0.96802939], 
+        [-1.68155971, 1.07910857],
+        [1.12244615, 0.2843331]]
+# eg: w3[0][0], w3[1][2]
+b3 = [0.3667967, -0.77614244]
+# eg: b3[0], b3[1]
+
+'''
+# Only run once, assign initial value to w2、b2、w3 and b3.
+list = BoxMullerMethod.boxmullersampling(mu=0, sigma=1, size=47)
+print(list)
+print(type(list))
+for i in range(len(list)):
+        if (i < 36):
+                w2.append(round(list[i],8))
+        if (i >= 36 and i < 39):
+                b2.append(round(list[i],8))
+        if (i >= 39 and i < 45):
+                w3.append(round(list[i],8))
+        if (i >= 45 and i < 47):
+                b3.append(round(list[i],8))
+print(w2)
+print(b2)
+print(w3)
+print(b3)
+'''
+
+# Save Initial Value of w2, b2, w3, b3 for backup.
+SaveInitialVal_w2 = w2
+SaveInitialVal_b2 = b2
+SaveInitialVal_w3 = w3
+SaveInitialVal_b2 = b3
 
 # Training data
 # 1-32 positive solution variable t1 = 0
@@ -297,3 +311,10 @@ x64 = [ [0,1,0],
         [1,0,0], 
         [1,0,0], 
         [0,1,0]]
+
+
+
+
+
+
+
