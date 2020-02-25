@@ -4,6 +4,7 @@
 # The Hiden layer Weight is w2(12*3)，Bias is b2(3).
 # The Output layer Weight is w3(3*2)，Bias is b3(2).
 
+
 import BoxMullerMethod
 
 # Hiden layer weights and bias
