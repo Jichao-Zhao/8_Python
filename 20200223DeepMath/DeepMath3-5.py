@@ -8,34 +8,9 @@ import numpy as np
 import BoxMullerMethod
 import UserMath
 import TrainData
+from sympy import symbols, diff
 
-# Hiden layer weights and bias
-w2 = np.array([[
-    -0.45444516, -1.83510657, 1.27247984, -1.45458804, 1.08766694, -0.37151135,
-    -0.8573246, -0.05739722, -1.4002747, 0.42005857, 0.99200974, -0.87716348
-],
-               [
-                   0.0327783, -0.72105977, -0.7385377, 0.06201517, 0.29853099,
-                   -0.26401057, 0.3584689, 0.08528764, -0.30570022,
-                   -0.54182688, -0.22010296, 0.75816668
-               ],
-               [
-                   -0.75117284, 0.27116044, -0.60955939, -0.2098032,
-                   0.38849476, -0.44462426, 2.00073451, 0.34762639,
-                   -1.22162309, -0.86771674, -1.46696489, 0.69337321
-               ]],
-              dtype=float)
-# eg: w2[0][0], w2[1][5], w2[2][11]
-b2 = np.array([[0.19351774], [-1.53711558], [-1.66900736]], dtype=float)
-# eg: b2[0], b2[1], b2[2]
 
-# Output layer weights and bias
-w3 = np.array([[1.03787369, 0.96802939, -1.68155971],
-               [1.07910857, 1.12244615, 0.2843331]],
-              dtype=float)
-# eg: w3[0][0], w3[1][2]
-b3 = np.array([[0.3667967], [-0.77614244]], dtype=float)
-# eg: b3[0], b3[1]
 '''
 # Only run once, assign initial value to w2、b2、w3 and b3.
 list = BoxMullerMethod.boxmullersampling(mu=0, sigma=1, size=47)
@@ -55,118 +30,6 @@ print(b2)
 print(w3)
 print(b3)
 '''
-
-# Save Initial Value of w2, b2, w3, b3 for backup.
-SaveInitialVal_w2 = w2
-SaveInitialVal_b2 = b2
-SaveInitialVal_w3 = w3
-SaveInitialVal_b2 = b3
-
-# Training data
-# 1-32 positive solution variable t1 = 1, t2 = 0.
-data1 = [[1, 1, 1], [1, 0, 1], [1, 0, 1], [1, 1, 1]]
-data2 = [[0, 1, 1], [1, 0, 1], [1, 0, 1], [1, 1, 1]]
-data3 = [[1, 1, 0], [1, 0, 1], [1, 0, 1], [1, 1, 1]]
-data4 = [[1, 1, 1], [1, 0, 1], [1, 0, 1], [1, 1, 0]]
-data5 = [[1, 1, 1], [1, 0, 1], [1, 0, 1], [0, 1, 1]]
-data6 = [[0, 0, 0], [1, 1, 1], [1, 0, 1], [1, 1, 1]]
-data7 = [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 1]]
-data8 = [[0, 0, 0], [1, 1, 0], [1, 0, 1], [1, 1, 1]]
-data9 = [[0, 0, 0], [1, 1, 1], [1, 0, 1], [1, 1, 0]]
-data10 = [[0, 0, 0], [1, 1, 1], [1, 0, 1], [0, 1, 1]]
-data11 = [[1, 1, 1], [1, 0, 1], [1, 1, 1], [0, 0, 0]]
-data12 = [[0, 1, 1], [1, 0, 1], [1, 1, 1], [0, 0, 0]]
-data13 = [[1, 1, 0], [1, 0, 1], [1, 1, 1], [0, 0, 0]]
-data14 = [[1, 1, 1], [1, 0, 1], [1, 1, 0], [0, 0, 0]]
-data15 = [[1, 1, 1], [1, 0, 1], [0, 1, 1], [0, 0, 0]]
-data16 = [[1, 0, 1], [1, 0, 1], [1, 0, 1], [1, 1, 1]]
-data17 = [[1, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 1]]
-data18 = [[1, 1, 1], [1, 0, 1], [1, 0, 0], [1, 1, 1]]
-data19 = [[1, 1, 1], [1, 0, 1], [1, 0, 1], [1, 0, 1]]
-data20 = [[1, 1, 1], [1, 0, 1], [0, 0, 1], [1, 1, 1]]
-data21 = [[1, 1, 1], [0, 0, 1], [1, 0, 1], [1, 1, 1]]
-data22 = [[0, 0, 1], [1, 0, 1], [1, 0, 1], [1, 1, 1]]
-data23 = [[0, 1, 1], [1, 0, 0], [0, 0, 1], [1, 1, 1]]
-data24 = [[0, 1, 1], [1, 0, 1], [1, 0, 0], [1, 1, 1]]
-data25 = [[0, 1, 1], [1, 0, 1], [1, 0, 1], [1, 0, 1]]
-data26 = [[0, 1, 1], [1, 0, 1], [0, 0, 1], [1, 1, 1]]
-data27 = [[0, 1, 1], [0, 0, 1], [1, 0, 1], [1, 1, 1]]
-data28 = [[1, 1, 0], [1, 0, 0], [1, 0, 1], [1, 1, 1]]
-data29 = [[1, 1, 0], [1, 0, 1], [1, 0, 0], [1, 1, 1]]
-data30 = [[1, 1, 0], [1, 0, 1], [1, 0, 1], [1, 0, 1]]
-data31 = [[1, 1, 0], [1, 0, 1], [0, 0, 1], [1, 1, 1]]
-data32 = [[1, 1, 0], [0, 0, 1], [1, 0, 1], [1, 1, 1]]
-
-# 33-64 positive solution variable t1 = 0, t2 = 1.
-data33 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]]
-data34 = [[1, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]]
-data35 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]]
-data36 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [1, 1, 0]]
-data37 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 1]]
-data38 = [[1, 1, 0], [0, 1, 0], [0, 1, 0], [1, 1, 0]]
-data39 = [[1, 1, 0], [0, 1, 0], [0, 1, 0], [0, 1, 1]]
-data40 = [[1, 1, 0], [0, 1, 0], [0, 1, 0], [1, 1, 1]]
-data41 = [[0, 1, 0], [0, 1, 1], [0, 1, 0], [0, 1, 0]]
-data42 = [[0, 1, 0], [0, 1, 0], [0, 1, 1], [0, 1, 0]]
-data43 = [[1, 1, 0], [0, 1, 1], [0, 1, 0], [0, 1, 0]]
-data44 = [[1, 1, 0], [0, 1, 0], [0, 1, 1], [0, 1, 0]]
-data45 = [[0, 1, 0], [0, 1, 1], [0, 1, 0], [1, 1, 0]]
-data46 = [[0, 1, 0], [0, 1, 0], [0, 1, 1], [1, 1, 0]]
-data47 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [1, 1, 1]]
-data48 = [[1, 1, 0], [0, 1, 1], [0, 1, 1], [1, 1, 1]]
-data49 = [[1, 1, 0], [0, 1, 0], [0, 1, 0], [1, 1, 0]]
-data50 = [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 1]]
-data51 = [[1, 1, 0], [1, 1, 0], [0, 1, 0], [0, 1, 0]]
-data52 = [[1, 1, 0], [0, 1, 0], [1, 1, 0], [0, 1, 0]]
-data53 = [[1, 1, 0], [1, 1, 0], [1, 1, 0], [1, 1, 0]]
-data54 = [[1, 1, 0], [0, 1, 0], [0, 0, 0], [0, 1, 0]]
-data55 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [1, 0, 0]]
-data56 = [[1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]]
-data57 = [[1, 0, 0], [0, 1, 0], [0, 1, 0], [0, 0, 1]]
-data58 = [[0, 1, 0], [0, 0, 0], [0, 1, 0], [1, 1, 0]]
-data59 = [[0, 1, 0], [0, 1, 0], [0, 0, 0], [1, 1, 0]]
-data60 = [[0, 0, 0], [0, 1, 0], [0, 1, 0], [1, 1, 0]]
-data61 = [[0, 0, 0], [0, 1, 0], [0, 1, 0], [0, 1, 0]]
-data62 = [[0, 1, 0], [0, 1, 0], [0, 1, 0], [0, 0, 0]]
-data63 = [[0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 1, 0]]
-data64 = [[0, 1, 0], [1, 0, 0], [1, 0, 0], [0, 1, 0]]
-
-# Assign values to each varibale in the Input layer.
-a1 = np.empty((12, 1))
-a1[0][0] = data1[0][0]
-a1[1][0] = data1[0][1]
-a1[2][0] = data1[0][2]
-a1[3][0] = data1[1][0]
-a1[4][0] = data1[1][1]
-a1[5][0] = data1[1][2]
-a1[6][0] = data1[2][0]
-a1[7][0] = data1[2][1]
-a1[8][0] = data1[2][2]
-a1[9][0] = data1[3][0]
-a1[10][0] = data1[3][1]
-a1[11][0] = data1[3][2]
-
-# Compute the values of Hidden layer.
-z2 = np.empty((3, 1))
-z2 = np.dot(w2, a1) + b2
-# Activation function: Sigmoid(x) = 1/(1+exp(-x))
-a2 = np.empty((3, 1))
-a2 = UserMath.Sigmoid(z2)
-
-# Compute the values of Output layer.
-a3 = np.empty((2, 1))
-a3 = np.dot(w3, a2) + b3
-
-# Positive solution variable
-# If data is 0.
-t1 = 0
-t2 = 1
-# If data is 1.
-t1 = 1
-t2 = 0
-# Cost Function: CostFun = 1/2*((a3[0]-t1)^2+(a3[1]-t2)^2)
-CostFun = np.empty((1, 64))
-CostFun[0] = 1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2))
 
 
 # For
@@ -237,21 +100,77 @@ data = ([[1, 1, 1], [1, 0, 1], [1, 0, 1], [1, 1, 1]],
         [[0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 1, 0]],
         [[0, 1, 0], [1, 0, 0], [1, 0, 0], [0, 1, 0]])
 
-#for i in range(len(data)):
-for i in range(0, 32):
-        a1[0][0] = data[i][0][0]
-        a1[1][0] = data[i][0][1]
-        a1[2][0] = data[i][0][2]
-        a1[3][0] = data[i][1][0]
-        a1[4][0] = data[i][1][1]
-        a1[5][0] = data[i][1][2]
-        a1[6][0] = data[i][2][0]
-        a1[7][0] = data[i][2][1]
-        a1[8][0] = data[i][2][2]
-        a1[9][0] = data[i][3][0]
-        a1[10][0] = data[i][3][1]
-        a1[11][0] = data[i][3][2]
-       
+# Hiden layer weights and bias
+w2 = np.array([[
+    -0.45444516, -1.83510657, 1.27247984, -1.45458804, 1.08766694, -0.37151135,
+    -0.8573246, -0.05739722, -1.4002747, 0.42005857, 0.99200974, -0.87716348
+],
+               [
+                   0.0327783, -0.72105977, -0.7385377, 0.06201517, 0.29853099,
+                   -0.26401057, 0.3584689, 0.08528764, -0.30570022,
+                   -0.54182688, -0.22010296, 0.75816668
+               ],
+               [
+                   -0.75117284, 0.27116044, -0.60955939, -0.2098032,
+                   0.38849476, -0.44462426, 2.00073451, 0.34762639,
+                   -1.22162309, -0.86771674, -1.46696489, 0.69337321
+               ]],
+              dtype=float)
+# eg: w2[0][0], w2[1][5], w2[2][11]
+b2 = np.array([[0.19351774], [-1.53711558], [-1.66900736]], dtype=float)
+# eg: b2[0], b2[1], b2[2]
+
+# Output layer weights and bias
+w3 = np.array([[1.03787369, 0.96802939, -1.68155971],
+               [1.07910857, 1.12244615, 0.2843331]],
+              dtype=float)
+# eg: w3[0][0], w3[1][2]
+b3 = np.array([[0.3667967], [-0.77614244]], dtype=float)
+# eg: b3[0], b3[1]
+
+lr = 0.1 # Learning rate
+
+# Save Initial Value of w2, b2, w3, b3 for backup.
+SaveInitialVal_w2 = w2
+SaveInitialVal_b2 = b2
+SaveInitialVal_w3 = w3
+SaveInitialVal_b2 = b3
+
+
+a1 = np.empty((12, 1))
+
+'''
+No = 0
+a1[0][0] = data[No][0][0]
+a1[1][0] = data[No][0][1]
+a1[2][0] = data[No][0][2]
+a1[3][0] = data[No][1][0]
+a1[4][0] = data[No][1][1]
+a1[5][0] = data[No][1][2]
+a1[6][0] = data[No][2][0]
+a1[7][0] = data[No][2][1]
+a1[8][0] = data[No][2][2]
+a1[9][0] = data[No][3][0]
+a1[10][0] = data[No][3][1]
+a1[11][0] = data[No][3][2]
+'''
+
+'''
+CostFunAll = 0.000
+for No in range(0, 64):
+        a1[0][0] = data[No][0][0]
+        a1[1][0] = data[No][0][1]
+        a1[2][0] = data[No][0][2]
+        a1[3][0] = data[No][1][0]
+        a1[4][0] = data[No][1][1]
+        a1[5][0] = data[No][1][2]
+        a1[6][0] = data[No][2][0]
+        a1[7][0] = data[No][2][1]
+        a1[8][0] = data[No][2][2]
+        a1[9][0] = data[No][3][0]
+        a1[10][0] = data[No][3][1]
+        a1[11][0] = data[No][3][2]
+        
         # Compute the values of Hidden layer.
         z2 = np.empty((3, 1))
         z2 = np.dot(w2, a1) + b2
@@ -260,21 +179,144 @@ for i in range(0, 32):
         a2 = UserMath.Sigmoid(z2)
 
         # Compute the values of Output layer.
+        z3 = np.empty((2, 1))
+        z3 = np.dot(w3, a2) + b3
+        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
         a3 = np.empty((2, 1))
-        a3 = np.dot(w3, a2) + b3
-        
+        a3 = UserMath.Sigmoid(z3)
+
         # Positive solution variable
         # If data is 0.
-        t1 = 0
-        t2 = 1
+        if (No < 32):
+                t1 = 0
+                t2 = 1
         # If data is 1.
-        # t1 = 1
-        # t2 = 0
+        else:
+                t1 = 1
+                t2 = 0
+
         # Cost Function: CostFun = 1/2*((a3[0]-t1)^2+(a3[1]-t2)^2)
-        #CostFun = np.empty((1, 64))
-        #CostFun[i] = 1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2))
-        CostFun = []
-        CostFun.append(1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
+        #CostFun = np.empty((64, 1), dtype=float)
+        #CostFun[No][0] = 1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2))
+        CostFun = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
+        CostFunAll = CostFunAll + CostFun
+'''
+
+
+for step in range(0, 10000):
+        No = 0
+        a1[0][0] = data[No][0][0]
+        a1[1][0] = data[No][0][1]
+        a1[2][0] = data[No][0][2]
+        a1[3][0] = data[No][1][0]
+        a1[4][0] = data[No][1][1]
+        a1[5][0] = data[No][1][2]
+        a1[6][0] = data[No][2][0]
+        a1[7][0] = data[No][2][1]
+        a1[8][0] = data[No][2][2]
+        a1[9][0] = data[No][3][0]
+        a1[10][0] = data[No][3][1]
+        a1[11][0] = data[No][3][2]
+
+        # Compute the values of Hidden layer.
+        z2 = np.empty((3, 1))
+        z2 = np.dot(w2, a1) + b2
+        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
+        a2 = np.empty((3, 1))
+        a2 = UserMath.Sigmoid(z2)
+
+        # Compute the values of Output layer.
+        z3 = np.empty((2, 1))
+        z3 = np.dot(w3, a2) + b3
+        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
+        a3 = np.empty((2, 1))
+        a3 = UserMath.Sigmoid(z3)
+
+        # Positive solution variable
+        # If data is 0.
+        if (No < 32):
+                t1 = 0
+                t2 = 1
+        # If data is 1.
+        else:
+                t1 = 1
+                t2 = 0
+
+        CostFun = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
+
+        # Neural unit error.
+        # Delta3[0][0], Delta3[1][0].
+        Delta3 = np.empty((2 ,1))
+        # Delta3[0][0] = (UserMath.Sigmoid(z3[0][0])-t1) * UserMath.Sigmoid(z3[0][0]) * (1-UserMath.Sigmoid(z3[0][0]))
+        # Delta3[1][0] = (UserMath.Sigmoid(z3[1][0])-t2) * UserMath.Sigmoid(z3[1][0]) * (1-UserMath.Sigmoid(z3[1][0]))
+        t = np.empty((2, 1))
+        t[0][0] = t1
+        t[1][0] = t2
+        Delta3 = (UserMath.Sigmoid(z3)-t) * UserMath.SigmoidDerivative(z3)
+        # Delta2[0][0], Delta2[1][0], Delta[2][0].
+        Delta2 = np.empty((3, 1))
+        # Delta2[0][0] = (Delta3[0][0]*w3[0][0] + Delta3[1][0]*w3[1][0]) * UserMath.Sigmoid(z2[0][0])*(1-UserMath.Sigmoid(z2[0][0]))
+        # Delta2[1][0] = (Delta3[0][0]*w3[0][1] + Delta3[1][0]*w3[1][1]) * UserMath.Sigmoid(z2[1][0])*(1-UserMath.Sigmoid(z2[1][0])) 
+        # Delta2[2][0] = (Delta3[0][0]*w3[0][2] + Delta3[1][0]*w3[1][2]) * UserMath.Sigmoid(z2[2][0])*(1-UserMath.Sigmoid(z2[2][0])) 
+        Delta2 = np.dot(Delta3.T, w3).T * UserMath.SigmoidDerivative(z2)
+        # print(Delta3, Delta2)
+
+        # Gradient Compute.
+        # Partial Derivative
+        PDcw3 = np.empty((2, 3))
+        for i in range(0, 3):
+                for j in range(0, 2):
+                        PDcw3[j][i] = Delta3[j][0] * a2[i][0]
+
+        PDcb3 = np.empty((2, 1))
+        for i in range(0, 2):
+                PDcb3[i][0] = Delta3[i][0]
+
+        PDcw2 = np.empty((3, 12))
+        for i in range(0, 12):
+                for j in range(0, 3):
+                        PDcw2[j][i] = Delta2[j][0] * a1[i][0]
+
+        PDcb2 = np.empty((3, 1))
+        for i in range(0, 3):
+                PDcb2[i][0] = Delta2[i][0]
+
+        # Gradient Partial Descent.
+        GPDcw3 = PDcw3 * (-lr)
+        GPDcb3 = PDcb3 * (-lr)
+        GPDcw2 = PDcw2 * (-lr)
+        GPDcb2 = PDcb2 * (-lr)
+
+        w3 = w3 + GPDcw3
+        b3 = b3 + GPDcb3
+        w2 = w2 + GPDcw2
+        b2 = b2 + GPDcb2
         print(CostFun)
-print(type(CostFun))
+
+'''
+        # Print results.
+        # print('---------------------Steps:'+str(step)+'---------------------')
+        print('------------------w3:------------------')
+        print(w3)
+        print('------------------b3:------------------')
+        print(b3)
+        print('------------------w2:------------------')
+        print(w2)
+        print('------------------b2:------------------')
+        print(b2)
+        # print('------------------------CostFun:------------------------')
+        print(b2[0][0])
+        # print('------------------------CostFun:------------------------')
+
+print('------------------w3:------------------')
+print(w3)
+print('------------------b3:------------------')
+print(b3)
+print('------------------w2:------------------')
+print(w2)
+print('------------------b2:------------------')
+print(b2)
+
+'''
+
 
