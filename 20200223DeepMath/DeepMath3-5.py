@@ -128,7 +128,8 @@ w3 = np.array([[1.03787369, 0.96802939, -1.68155971],
 b3 = np.array([[0.3667967], [-0.77614244]], dtype=float)
 # eg: b3[0], b3[1]
 
-lr = 0.01 # Learning rate
+lr = 0.001 # Learning rate.
+steps = 10 # Steps.
 
 # Save Initial Value of w2, b2, w3, b3 for backup.
 SaveInitialVal_w2 = w2
@@ -139,7 +140,7 @@ SaveInitialVal_b2 = b3
 a1 = np.zeros((12, 1))
 
 # Steps
-for step in range(0, 10000):
+for step in range(0, steps):
 
         CostFunAll = 0
         PDcw3All = np.zeros((2, 3))
@@ -251,7 +252,9 @@ for step in range(0, 10000):
         print(CostFunAll)
 
 # Final results.
+print(CostFunAll)
 print(b3)
+print(w3)
 
 '''
         # Print results.
