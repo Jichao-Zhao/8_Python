@@ -128,7 +128,7 @@ w3 = np.array([[1.03787369, 0.96802939, -1.68155971],
 b3 = np.array([[0.3667967], [-0.77614244]], dtype=float)
 # eg: b3[0], b3[1]
 
-lr = 0.1 # Learning rate
+lr = 0.01 # Learning rate
 
 # Save Initial Value of w2, b2, w3, b3 for backup.
 SaveInitialVal_w2 = w2
@@ -136,162 +136,122 @@ SaveInitialVal_b2 = b2
 SaveInitialVal_w3 = w3
 SaveInitialVal_b2 = b3
 
+a1 = np.zeros((12, 1))
 
-a1 = np.empty((12, 1))
-
-'''
-No = 0
-a1[0][0] = data[No][0][0]
-a1[1][0] = data[No][0][1]
-a1[2][0] = data[No][0][2]
-a1[3][0] = data[No][1][0]
-a1[4][0] = data[No][1][1]
-a1[5][0] = data[No][1][2]
-a1[6][0] = data[No][2][0]
-a1[7][0] = data[No][2][1]
-a1[8][0] = data[No][2][2]
-a1[9][0] = data[No][3][0]
-a1[10][0] = data[No][3][1]
-a1[11][0] = data[No][3][2]
-'''
-
-'''
-CostFunAll = 0.000
-for No in range(0, 64):
-        a1[0][0] = data[No][0][0]
-        a1[1][0] = data[No][0][1]
-        a1[2][0] = data[No][0][2]
-        a1[3][0] = data[No][1][0]
-        a1[4][0] = data[No][1][1]
-        a1[5][0] = data[No][1][2]
-        a1[6][0] = data[No][2][0]
-        a1[7][0] = data[No][2][1]
-        a1[8][0] = data[No][2][2]
-        a1[9][0] = data[No][3][0]
-        a1[10][0] = data[No][3][1]
-        a1[11][0] = data[No][3][2]
-        
-        # Compute the values of Hidden layer.
-        z2 = np.empty((3, 1))
-        z2 = np.dot(w2, a1) + b2
-        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
-        a2 = np.empty((3, 1))
-        a2 = UserMath.Sigmoid(z2)
-
-        # Compute the values of Output layer.
-        z3 = np.empty((2, 1))
-        z3 = np.dot(w3, a2) + b3
-        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
-        a3 = np.empty((2, 1))
-        a3 = UserMath.Sigmoid(z3)
-
-        # Positive solution variable
-        # If data is 0.
-        if (No < 32):
-                t1 = 0
-                t2 = 1
-        # If data is 1.
-        else:
-                t1 = 1
-                t2 = 0
-
-        # Cost Function: CostFun = 1/2*((a3[0]-t1)^2+(a3[1]-t2)^2)
-        #CostFun = np.empty((64, 1), dtype=float)
-        #CostFun[No][0] = 1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2))
-        CostFun = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
-        CostFunAll = CostFunAll + CostFun
-'''
-
-
+# Steps
 for step in range(0, 10000):
-        No = 0
-        a1[0][0] = data[No][0][0]
-        a1[1][0] = data[No][0][1]
-        a1[2][0] = data[No][0][2]
-        a1[3][0] = data[No][1][0]
-        a1[4][0] = data[No][1][1]
-        a1[5][0] = data[No][1][2]
-        a1[6][0] = data[No][2][0]
-        a1[7][0] = data[No][2][1]
-        a1[8][0] = data[No][2][2]
-        a1[9][0] = data[No][3][0]
-        a1[10][0] = data[No][3][1]
-        a1[11][0] = data[No][3][2]
 
-        # Compute the values of Hidden layer.
-        z2 = np.empty((3, 1))
-        z2 = np.dot(w2, a1) + b2
-        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
-        a2 = np.empty((3, 1))
-        a2 = UserMath.Sigmoid(z2)
+        CostFunAll = 0
+        PDcw3All = np.zeros((2, 3))
+        PDcb3All = np.zeros((2, 1))
+        PDcw2All = np.zeros((3, 12))
+        PDcb2All = np.zeros((3, 1))
 
-        # Compute the values of Output layer.
-        z3 = np.empty((2, 1))
-        z3 = np.dot(w3, a2) + b3
-        # Activation function: Sigmoid(x) = 1/(1+exp(-x))
-        a3 = np.empty((2, 1))
-        a3 = UserMath.Sigmoid(z3)
+        for No in range(0, 64):
+                # No = 0
+                a1[0][0] = data[No][0][0]
+                a1[1][0] = data[No][0][1]
+                a1[2][0] = data[No][0][2]
+                a1[3][0] = data[No][1][0]
+                a1[4][0] = data[No][1][1]
+                a1[5][0] = data[No][1][2]
+                a1[6][0] = data[No][2][0]
+                a1[7][0] = data[No][2][1]
+                a1[8][0] = data[No][2][2]
+                a1[9][0] = data[No][3][0]
+                a1[10][0] = data[No][3][1]
+                a1[11][0] = data[No][3][2]
 
-        # Positive solution variable
-        # If data is 0.
-        if (No < 32):
-                t1 = 0
-                t2 = 1
-        # If data is 1.
-        else:
-                t1 = 1
-                t2 = 0
+                # Compute the values of Hidden layer.
+                z2 = np.zeros((3, 1))
+                z2 = np.dot(w2, a1) + b2
+                # Activation function: Sigmoid(x) = 1/(1+exp(-x))
+                a2 = np.zeros((3, 1))
+                a2 = UserMath.Sigmoid(z2)
 
-        CostFun = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
+                # Compute the values of Output layer.
+                z3 = np.zeros((2, 1))
+                z3 = np.dot(w3, a2) + b3
+                # Activation function: Sigmoid(x) = 1/(1+exp(-x))
+                a3 = np.zeros((2, 1))
+                a3 = UserMath.Sigmoid(z3)
 
-        # Neural unit error.
-        # Delta3[0][0], Delta3[1][0].
-        Delta3 = np.empty((2 ,1))
-        # Delta3[0][0] = (UserMath.Sigmoid(z3[0][0])-t1) * UserMath.Sigmoid(z3[0][0]) * (1-UserMath.Sigmoid(z3[0][0]))
-        # Delta3[1][0] = (UserMath.Sigmoid(z3[1][0])-t2) * UserMath.Sigmoid(z3[1][0]) * (1-UserMath.Sigmoid(z3[1][0]))
-        t = np.empty((2, 1))
-        t[0][0] = t1
-        t[1][0] = t2
-        Delta3 = (UserMath.Sigmoid(z3)-t) * UserMath.SigmoidDerivative(z3)
-        # Delta2[0][0], Delta2[1][0], Delta[2][0].
-        Delta2 = np.empty((3, 1))
-        # Delta2[0][0] = (Delta3[0][0]*w3[0][0] + Delta3[1][0]*w3[1][0]) * UserMath.Sigmoid(z2[0][0])*(1-UserMath.Sigmoid(z2[0][0]))
-        # Delta2[1][0] = (Delta3[0][0]*w3[0][1] + Delta3[1][0]*w3[1][1]) * UserMath.Sigmoid(z2[1][0])*(1-UserMath.Sigmoid(z2[1][0])) 
-        # Delta2[2][0] = (Delta3[0][0]*w3[0][2] + Delta3[1][0]*w3[1][2]) * UserMath.Sigmoid(z2[2][0])*(1-UserMath.Sigmoid(z2[2][0])) 
-        Delta2 = np.dot(Delta3.T, w3).T * UserMath.SigmoidDerivative(z2)
-        # print(Delta3, Delta2)
+                # Positive solution variable
+                # If data is 0.
+                if (No < 32):
+                        t1 = 0
+                        t2 = 1
+                # If data is 1.
+                else:
+                        t1 = 1
+                        t2 = 0
 
-        # Gradient Compute.
-        # Partial Derivative
-        PDcw3 = np.empty((2, 3))
-        for i in range(0, 3):
-                for j in range(0, 2):
-                        PDcw3[j][i] = Delta3[j][0] * a2[i][0]
+                CostFun = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
 
-        PDcb3 = np.empty((2, 1))
-        for i in range(0, 2):
-                PDcb3[i][0] = Delta3[i][0]
+                # Neural unit error.
+                # Delta3[0][0], Delta3[1][0].
+                Delta3 = np.zeros((2 ,1))
+                # Delta3[0][0] = (UserMath.Sigmoid(z3[0][0])-t1) * UserMath.Sigmoid(z3[0][0]) * (1-UserMath.Sigmoid(z3[0][0]))
+                # Delta3[1][0] = (UserMath.Sigmoid(z3[1][0])-t2) * UserMath.Sigmoid(z3[1][0]) * (1-UserMath.Sigmoid(z3[1][0]))
+                t = np.zeros((2, 1))
+                t[0][0] = t1
+                t[1][0] = t2
+                Delta3 = (UserMath.Sigmoid(z3)-t) * UserMath.SigmoidDerivative(z3)
+                # Delta2[0][0], Delta2[1][0], Delta[2][0].
+                Delta2 = np.zeros((3, 1))
+                # Delta2[0][0] = (Delta3[0][0]*w3[0][0] + Delta3[1][0]*w3[1][0]) * UserMath.Sigmoid(z2[0][0])*(1-UserMath.Sigmoid(z2[0][0]))
+                # Delta2[1][0] = (Delta3[0][0]*w3[0][1] + Delta3[1][0]*w3[1][1]) * UserMath.Sigmoid(z2[1][0])*(1-UserMath.Sigmoid(z2[1][0])) 
+                # Delta2[2][0] = (Delta3[0][0]*w3[0][2] + Delta3[1][0]*w3[1][2]) * UserMath.Sigmoid(z2[2][0])*(1-UserMath.Sigmoid(z2[2][0])) 
+                Delta2 = np.dot(Delta3.T, w3).T * UserMath.SigmoidDerivative(z2)
+                # print(Delta3, Delta2)
 
-        PDcw2 = np.empty((3, 12))
-        for i in range(0, 12):
-                for j in range(0, 3):
-                        PDcw2[j][i] = Delta2[j][0] * a1[i][0]
+                # Gradient Compute.
+                # Partial Derivative
+                PDcw3 = np.zeros((2, 3))
+                for i in range(0, 3):
+                        for j in range(0, 2):
+                                PDcw3[j][i] = Delta3[j][0] * a2[i][0]
+                
+                PDcb3 = np.zeros((2, 1))
+                for i in range(0, 2):
+                        PDcb3[i][0] = Delta3[i][0]
 
-        PDcb2 = np.empty((3, 1))
-        for i in range(0, 3):
-                PDcb2[i][0] = Delta2[i][0]
+                PDcw2 = np.zeros((3, 12))
+                for i in range(0, 12):
+                        for j in range(0, 3):
+                                PDcw2[j][i] = Delta2[j][0] * a1[i][0]
+
+                PDcb2 = np.zeros((3, 1))
+                for i in range(0, 3):
+                        PDcb2[i][0] = Delta2[i][0]
+                
+                PDcw3All = PDcw3All + PDcw3
+                PDcb3All = PDcb3All + PDcb3
+                PDcw2All = PDcw2All + PDcw2
+                PDcb2All = PDcb2All + PDcb2
+                CostFunAll = CostFunAll + CostFun
+                
+                #print(str(No) + 'CostFun' + str(CostFun))
+                #print(str(No) + 'PDcw3' + str(PDcw3))
+        #print(CostFunAll)
+        #print(PDcw3All)
 
         # Gradient Partial Descent.
-        GPDcw3 = PDcw3 * (-lr)
-        GPDcb3 = PDcb3 * (-lr)
-        GPDcw2 = PDcw2 * (-lr)
-        GPDcb2 = PDcb2 * (-lr)
+        GPDcw3 = PDcw3All * (-lr)
+        GPDcb3 = PDcb3All * (-lr)
+        GPDcw2 = PDcw2All * (-lr)
+        GPDcb2 = PDcb2All * (-lr)
 
         w3 = w3 + GPDcw3
         b3 = b3 + GPDcb3
         w2 = w2 + GPDcw2
         b2 = b2 + GPDcb2
-        print(CostFun)
+        
+        # CostFunAll = (1/2*(np.square(a3[0][0]-t1)+np.square(a3[1][0]-t2)))
+        print(CostFunAll)
+
+# Final results.
+print(b3)
 
 '''
         # Print results.
@@ -318,5 +278,3 @@ print('------------------b2:------------------')
 print(b2)
 
 '''
-
-
